@@ -19,6 +19,10 @@ public class SteamGame implements Serializable {
     private Integer rating;
     private String status;
     private Integer hoursPlayed;
+    private Integer averageTimeSpent;
+    private Integer medianTimeSpent;
+    private Integer reviewScore;
+    private String reviewScoreDesc;
 
 
 }
