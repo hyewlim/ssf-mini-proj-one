@@ -20,7 +20,7 @@ public class RedisConfig {
     @Value("${spring.redis.port}")
     private Integer redisPort;
     @Value("${REDIS_PASSWORD}")
-    private String redisPassword;
+    private String redisPassword = System.getenv("REDIS_PASSWORD");
 
     @Bean("redislab")
     @Primary
