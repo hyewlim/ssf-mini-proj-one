@@ -1,6 +1,5 @@
 package com.project.model;
 
-import com.project.service.SteamService;
 import jakarta.json.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,16 +10,16 @@ import org.slf4j.LoggerFactory;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Review {
+public class SteamReview {
 
-    private static final Logger logger = LoggerFactory.getLogger(Review.class);
+    private static final Logger logger = LoggerFactory.getLogger(SteamReview.class);
 
     private Integer reviewScore;
 
     private String reviewScoreDesc;
 
-    public static Review create(JsonObject jsonObject) {
-        Review review = new Review();
+    public static SteamReview create(JsonObject jsonObject) {
+        SteamReview review = new SteamReview();
         review.setReviewScore(jsonObject.getJsonNumber("review_score").intValue());
         review.setReviewScoreDesc(jsonObject.getString("review_score_desc"));
         logger.info("Review created: " + review.toString());

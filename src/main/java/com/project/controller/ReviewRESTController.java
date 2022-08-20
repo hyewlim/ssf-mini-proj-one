@@ -1,6 +1,6 @@
 package com.project.controller;
 
-import com.project.model.Review;
+import com.project.model.SteamReview;
 import com.project.model.SteamSpyGame;
 import com.project.service.SteamService;
 import com.project.service.SteamSpyService;
@@ -24,7 +24,7 @@ public class ReviewRESTController {
 
     @GetMapping (value = "/review/{id}")
     public ResponseEntity<?> getSteamReview(@PathVariable String id) {
-        Review review = steamService.getReview(id);
+        SteamReview review = steamService.getReview(id);
         return ResponseEntity.ok(review);
     }
 
@@ -39,6 +39,12 @@ public class ReviewRESTController {
     public ResponseEntity<?> getSteamSpyGame(@PathVariable String id) {
         SteamSpyGame game = spyService.getSteamSpyGame(id);
         return ResponseEntity.ok(game);
+    }
+
+    @GetMapping (value = "/url/{id}")
+    public ResponseEntity<?> getUrlGame(@PathVariable String id) {
+        String url = steamService.getImageUrl(id);
+        return ResponseEntity.ok(url);
     }
 
 }

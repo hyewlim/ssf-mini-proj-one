@@ -1,6 +1,8 @@
 package com.project.service;
 
-import com.project.model.Review;
+import com.project.model.SteamGame;
+import com.project.model.SteamReview;
+import com.project.model.SteamSpyGame;
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
@@ -28,7 +30,9 @@ public class SteamService {
 
     private static final String URL_RECENTLY_PLAYED_GAMES = "http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
 
-    public Review getReview(String id) {
+    private static final String URL_STEAM_IMAGE = "https://store.steampowered.com/api/appdetails";
+
+    public SteamReview getReview(String id) {
         String payload;
 
         String queryUrl = UriComponentsBuilder.fromUriString(URL)
@@ -52,7 +56,7 @@ public class SteamService {
         JsonReader jsonReader = Json.createReader(strReader);
         JsonObject reviews = jsonReader.readObject().getJsonObject("query_summary");
 
-        Review review = Review.create(reviews);
+        SteamReview review = SteamReview.create(reviews);
 
         return review;
     }
@@ -90,5 +94,44 @@ public class SteamService {
 
     }
 
+    public String getImageUrl(String id) {
+        String payload;
 
+        String queryUrl = UriComponentsBuilder.fromUriString(URL_STEAM_IMAGE)
+                .queryParam("appids", id)
+                .toUriString();
+
+        logger.info(">>> Get URL Address: " + queryUrl);
+
+        RequestEntity<Void> request = RequestEntity.get(queryUrl).build();
+
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<String> response;
+
+        response = template.exchange(request, String.class);
+        payload = response.getBody();
+        logger.info("URL Payload: created");
+
+        Reader strReader = new StringReader(payload);
+
+        JsonReader jsonReader = Json.createReader(strReader);
+        String imageUrl = jsonReader.readObject().getJsonObject(id).getJsonObject("data").getString("header_image");
+        logger.info(imageUrl.toString());
+
+        return imageUrl;
+    }
+
+
+    public static SteamGame createMain(SteamGame game, SteamSpyGame spyGame, SteamReview review) {
+        SteamService steamService = new SteamService();
+        SteamSpyService steamSpyService = new SteamSpyService();
+        game.setAppId(steamService.getAppID(game.getTitle()));
+        game.setAverageTimeSpent(spyGame.getAverageTimeSpent());
+        game.setMedianTimeSpent(spyGame.getMedianTimeSpent());
+        game.setReviewScore(review.getReviewScore());
+        game.setReviewScoreDesc(review.getReviewScoreDesc());
+        game.setImageUrl(steamService.getImageUrl(String.valueOf(game.getAppId())));
+        logger.info("Main game created: " + game.toString());
+        return game;
+    }
 }

@@ -2,8 +2,11 @@ package com.project.controller;
 
 
 import com.project.model.SteamGame;
+import com.project.model.SteamReview;
+import com.project.model.SteamSpyGame;
 import com.project.repository.GamesDao;
 import com.project.service.SteamService;
+import com.project.service.SteamSpyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +41,10 @@ public class IndexController {
     }
 
     @PostMapping("/create")
-    public String postGame(@ModelAttribute("game") SteamGame game, Model model) {
+    public String postGame(@ModelAttribute("game") SteamGame sgame, Model model) {
+        SteamGame game = SteamService.createMain(sgame,
+                new SteamSpyService().getSteamSpyGame(String.valueOf(service.getAppID(sgame.getTitle()))),
+                new SteamService().getReview(String.valueOf(service.getAppID(sgame.getTitle()))));
         dao.save(game);
         model.addAttribute("game", game);
         return "add-game-success";

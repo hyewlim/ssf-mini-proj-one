@@ -55,19 +55,25 @@
 <table class="table table-bordered table-striped mydatatable">
   <thead>
   <tr class="table-dark">
+    <th scope="col">Image</th>
     <th scope="col">Title</th>
-    <th scope="col">Rating</th>
     <th scope="col">Status</th>
-    <th scope="col">Hours Played</th>
+    <th scope="col">Time Spent</th>
+    <th scope="col">Average / Median</th>
+    <th scope="col">My Rating</th>
+    <th scope="col">Steam Rating</th>
     <th scope="col">Action</th>
   </tr>
   </thead>
   <tbody>
   <tr th:each ="game: ${listOfGames}">
+    <td><img th:src="@{${game.imageUrl}}" width="90" height="45"></td>
     <td th:text="${game.title}"></td>
-    <td th:text="${game.rating}"></td>
     <td th:text="${game.status}"></td>
-    <td th:text="${game.hoursPlayed}"></td>
+    <td th:text="${game.hoursPlayed} + 'h'"></td>
+    <td th:text="${game.averageTimeSpent} + 'h / ' + ${game.medianTimeSpent} + 'h'"></td>
+    <td th:text="${game.rating}"></td>
+    <td th:text="${game.reviewScore} + ' (' + ${game.reviewScoreDesc} + ')'"></td>
     <td>
       <!--update button-->
       <a th:href="@{update(gameTitle=${game.title})}" class="btn btn-info btn-sm">
