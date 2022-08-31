@@ -1,6 +1,7 @@
 package com.project.repository;
 
 import com.project.model.SteamGame;
+import com.project.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class GamesDao {
@@ -25,7 +24,7 @@ public class GamesDao {
     @Autowired
     private RedisTemplate template;
 
-    public SteamGame save(SteamGame game) {
+    public SteamGame save(SteamGame game, User user) {
         template.opsForHash().put(HASH_KEY, game.getTitle(), game);
         logger.info("Game saved: " + game.getTitle());
         return game;
@@ -33,6 +32,9 @@ public class GamesDao {
 
     public List<SteamGame> findAll() {
         List<SteamGame> list = template.opsForHash().values(HASH_KEY);
+//        List<Optional<SteamGame>> convertedList = list.stream()
+//                                                    .map((o) -> Optional.ofNullable(o))
+//                                                    .collect(Collectors.toList());
         return list;
     }
 

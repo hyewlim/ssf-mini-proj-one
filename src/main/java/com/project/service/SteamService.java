@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Optional;
 
 @Service
 public class SteamService {
@@ -117,6 +118,7 @@ public class SteamService {
         JsonReader jsonReader = Json.createReader(strReader);
         String imageUrl = jsonReader.readObject().getJsonObject(id).getJsonObject("data").getString("header_image");
         logger.info(imageUrl.toString());
+
 
         return imageUrl;
     }

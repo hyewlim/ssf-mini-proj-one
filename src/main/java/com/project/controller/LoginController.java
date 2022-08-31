@@ -24,22 +24,16 @@ public class LoginController {
 //        return "login";
 //    }
 
-    @GetMapping("/login")
-    public String login(Model model){
-        model.addAttribute("user", new User());
-        return "login";
-    }
-
-    @GetMapping("/create-user")
-    public String createUser(Model model){
-        model.addAttribute("user", new User());
-        return "create-user";
-    }
-
-    @PostMapping("/create-user")
-    public String userSubmit(@ModelAttribute User user, Model model){
-        model.addAttribute("user", user);
-        return "create-user-success";
-    }
+//    @GetMapping("/login")
+//    public String login(Model model){
+//        model.addAttribute("user", new User());
+//        return "login";
+//    }
+//
+//    @PostMapping("/login")
+//    public String userSubmit(@ModelAttribute User user, Model model){
+//        model.addAttribute("user", user);
+//        return "create-user-success";
+//    }
 
 }
