@@ -44,7 +44,7 @@ public class IndexController {
     public String userSubmit(@ModelAttribute User user, Model model){
         this.user = user;
         model.addAttribute("user", user);
-        List<SteamGame> listOfGames = dao.findAll();
+        List<SteamGame> listOfGames = dao.findAll(user);
         model.addAttribute("listOfGames", listOfGames);
         return "list-games";
     }
@@ -76,29 +76,7 @@ public class IndexController {
 
     @GetMapping("/list")
     public String listGames(Model model) {
-        List<SteamGame> listOfGames = dao.findAll();
-
-//        List<SteamGame> newListofGames = null;
-//
-//        for (Optional<SteamGame> gameInList : listOfGames) {
-//            gameInList.ifPresent(game -> {
-//                SteamGame steamGame = new SteamGame(
-//                        game.getAppId(),
-//                        game.getTitle(),
-//                        game.getRating(),
-//                        game.getStatus(),
-//                        game.getHoursPlayed(),
-//                        game.getAverageTimeSpent(),
-//                        game.getMedianTimeSpent(),
-//                        game.getReviewScore(),
-//                        game.getReviewScoreDesc(),
-//                        game.getImageUrl()
-//                );
-//                logger.info(steamGame.toString());
-//                newListofGames.add(steamGame);
-//            });
-//        }
-
+        List<SteamGame> listOfGames = dao.findAll(user);
         model.addAttribute("user", user);
         model.addAttribute("listOfGames", listOfGames);
         return "list-games";
@@ -106,7 +84,7 @@ public class IndexController {
 
     @GetMapping("/update")
     public String updateGame(@RequestParam("gameTitle") String title, Model model) {
-        SteamGame game = dao.findProductByTitle(title);
+        SteamGame game = dao.findProductByTitle(title, user);
         model.addAttribute("game", game);
 
         List<String> listStatus = Arrays.asList("Playing", "Backlog", "Completed", "Retired");
@@ -118,8 +96,9 @@ public class IndexController {
     }
 
     @GetMapping("/delete")
-    public String deleteGame(@RequestParam("gameTitle") String title) {
-        dao.deleteGame(title);
+    public String deleteGame(@RequestParam("gameTitle") String title, Model model) {
+        dao.deleteGame(title, user);
+        model.addAttribute("user", user);
         return "list-games";
     }
 

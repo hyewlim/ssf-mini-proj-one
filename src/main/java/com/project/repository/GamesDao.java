@@ -25,25 +25,23 @@ public class GamesDao {
     private RedisTemplate template;
 
     public SteamGame save(SteamGame game, User user) {
-        template.opsForHash().put(HASH_KEY, game.getTitle(), game);
+        template.opsForHash().put(user.getUserName(), game.getTitle(), game);
         logger.info("Game saved: " + game.getTitle());
+        logger.info("User: " + user.getUserName());
         return game;
     }
 
-    public List<SteamGame> findAll() {
-        List<SteamGame> list = template.opsForHash().values(HASH_KEY);
-//        List<Optional<SteamGame>> convertedList = list.stream()
-//                                                    .map((o) -> Optional.ofNullable(o))
-//                                                    .collect(Collectors.toList());
+    public List<SteamGame> findAll(User user) {
+        List<SteamGame> list = template.opsForHash().values(user.getUserName());
         return list;
     }
 
-    public SteamGame findProductByTitle(String title){
-        return (SteamGame)template.opsForHash().get(HASH_KEY, title);
+    public SteamGame findProductByTitle(String title, User user){
+        return (SteamGame)template.opsForHash().get(user.getUserName(), title);
     }
 
-    public String deleteGame(String title){
-        template.opsForHash().delete(HASH_KEY, title);
+    public String deleteGame(String title, User user){
+        template.opsForHash().delete(user.getUserName(), title);
         logger.info("Game deleted: " + title);
         return "game removed!";
     }
