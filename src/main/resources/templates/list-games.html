@@ -34,8 +34,15 @@
           <a class="nav-link" href="#">Link</a>
         </li>
       </ul>
+
+      <span class="navbar-text px-3" th:text="'User: ' + ${user.userName}"></span>
+
+      <form class="form-inline" >
+        <a href="/login" class="btn btn-sm btn-outline-secondary">Sign out</a>
+      </form>
+
     </div>
-    <td th:text="'Logged in as: ' + ${user.userName}"></td>
+
   </div>
 </nav>
 <!-- Navbar -->
