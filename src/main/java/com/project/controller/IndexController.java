@@ -2,8 +2,6 @@ package com.project.controller;
 
 
 import com.project.model.SteamGame;
-import com.project.model.SteamReview;
-import com.project.model.SteamSpyGame;
 import com.project.model.User;
 import com.project.repository.GamesDao;
 import com.project.service.SteamService;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping

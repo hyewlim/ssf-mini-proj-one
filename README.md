@@ -26,6 +26,8 @@ This application uses API from Steam and SteamSpy to gather the following data:
 
 ## How to use
 
+### MVC
+
  1. Pick a username to login
  2. Add Game 
     1. Input the exact title found on Steam
@@ -40,6 +42,21 @@ This application uses API from Steam and SteamSpy to gather the following data:
  4. You may also update or delete as required
  5. You may also sign out and log in as other user
 
+### REST API
+
+
+
+`/api/review/{id}`
+
+It will return review score and description in JSON
+
+e.g https://hyhy-mini-project-one.herokuapp.com/api/review/1172470
+
+`/api/steamspy/{id}`
+
+It will return appId, name, average time spent and median time spent in JSON
+
+e.g https://hyhy-mini-project-one.herokuapp.com/api/steamspy/1172470
 
 ---
 
