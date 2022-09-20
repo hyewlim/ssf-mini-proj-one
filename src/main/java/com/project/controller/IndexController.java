@@ -101,4 +101,12 @@ public class IndexController {
         return "list-games";
     }
 
+    @GetMapping("/stats")
+    public String stats(Model model){
+        List<SteamGame> listOfGames = dao.findAll(user);
+        model.addAttribute("user", user);
+        model.addAttribute("listOfGames", listOfGames);
+        return "stats";
+    }
+
 }
