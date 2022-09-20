@@ -95,7 +95,9 @@ public class IndexController {
     @GetMapping("/delete")
     public String deleteGame(@RequestParam("gameTitle") String title, Model model) {
         dao.deleteGame(title, user);
+        List<SteamGame> listOfGames = dao.findAll(user);
         model.addAttribute("user", user);
+        model.addAttribute("listOfGames", listOfGames);
         return "list-games";
     }
 
