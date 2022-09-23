@@ -104,6 +104,21 @@ public class IndexController {
     @GetMapping("/stats")
     public String stats(Model model){
         List<SteamGame> listOfGames = dao.findAll(user);
+
+        int hoursPlayed = 0;
+        for (int i = 0; i < listOfGames.size(); i++) {
+            hoursPlayed += listOfGames.get(i).getHoursPlayed();
+        }
+
+        int gamesCurrentlyPlaying = 0;
+        for (int i = 0; i < listOfGames.size(); i++) {
+            if (listOfGames.get(i).getStatus().equalsIgnoreCase("Playing")) {
+                gamesCurrentlyPlaying ++;
+            }
+        }
+
+        model.addAttribute("gcp", gamesCurrentlyPlaying);
+        model.addAttribute("hrplay", hoursPlayed);
         model.addAttribute("user", user);
         model.addAttribute("listOfGames", listOfGames);
         return "stats";

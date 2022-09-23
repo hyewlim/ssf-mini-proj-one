@@ -55,23 +55,11 @@
   <hr>
 
 
-  <div th:each="game, iterStat : ${listOfGames}", th:with="hoursPlayed=${game.hoursPlayed}">
 
-    <p>Total Hours Played: <span th:text="${hoursPlayed}"></span></p>
-
-
-<!--    <p>Total Games Completed: <span th:text="${iterStat.size && game.status == 'Completed'}" ></span></p>-->
-
-<!--    <td th:switch="${#game.size(game.status=='Completed')}">-->
-<!--      <span th:case="'0'">NO COURSES YET!</span>-->
-<!--      <div th:case="*">-->
-<!--        <span th:text="${game.size}"></span>-->
-<!--      </div>-->
-<!--    </td>-->
-
-  </div>
   <p>Total Games Played: <span th:text="${listOfGames.size}"></span></p>
-<!--  <div th:text="${listofGames[0].hoursPlayed}"></div>-->
+  <p>Total Hours Played: <span th:text="${hrplay}"></span></p>
+  <p>Games Currently Playing: <span th:text="${gcp}"></span></p>
+
 
 
 
