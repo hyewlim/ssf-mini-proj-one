@@ -18,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -63,23 +64,7 @@ public class SteamService {
     }
 
     public Integer getAppID(String name) {
-        String payload;
-
-        RequestEntity<Void> request = RequestEntity.get(URL_GET_APP_ID).build();
-
-        RestTemplate template = new RestTemplate();
-        ResponseEntity<String> response;
-
-        response = template.exchange(request, String.class);
-        payload = response.getBody();
-        logger.info("Payload: created");
-
-        Reader strReader = new StringReader(payload);
-
-        JsonReader jsonReader = Json.createReader(strReader);
-        JsonObject applist = jsonReader.readObject().getJsonObject("applist");
-        JsonArray apps = applist.getJsonArray("apps");
-
+        JsonArray apps = getAppList();
         Integer appId = 0;
 
         for (int i = 0; i < apps.size(); i++) {
@@ -136,6 +121,27 @@ public class SteamService {
         logger.info("Main game created: " + game.toString());
         return game;
     }
+
+    public JsonArray getAppList() {
+        String payload;
+
+        RequestEntity<Void> request = RequestEntity.get(URL_GET_APP_ID).build();
+
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<String> response;
+
+        response = template.exchange(request, String.class);
+        payload = response.getBody();
+        logger.info("Payload: created");
+
+        Reader strReader = new StringReader(payload);
+
+        JsonReader jsonReader = Json.createReader(strReader);
+        JsonObject applist = jsonReader.readObject().getJsonObject("applist");
+        JsonArray apps = applist.getJsonArray("apps");
+        return apps;
+    }
+
 
 
 }
