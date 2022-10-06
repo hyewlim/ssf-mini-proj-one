@@ -30,7 +30,7 @@ This application uses API from Steam and SteamSpy to gather the following data:
 
  1. Pick a username to login
  2. Add Game 
-    1. Input the exact title found on Steam
+    1. Input the title as found on Steam (Autocomplete feature added!)
     2. Rate the game you just played from 1-10
     3. Input the status of the game
        1. Playing
