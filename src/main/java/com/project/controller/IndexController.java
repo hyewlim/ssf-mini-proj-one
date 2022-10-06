@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +40,7 @@ public class IndexController {
     }
 
     @PostMapping("/login")
-    public String userSubmit(@ModelAttribute User user, Model model){
+    public String userSubmit(@ModelAttribute User user, Model model) throws IOException {
         this.user = user;
         model.addAttribute("user", user);
         List<SteamGame> listOfGames = dao.findAll(user);
@@ -122,6 +124,13 @@ public class IndexController {
         model.addAttribute("user", user);
         model.addAttribute("listOfGames", listOfGames);
         return "stats";
+    }
+
+    @GetMapping("/gameTitleAutoComplete")
+    @ResponseBody
+    public List<String> gameTitleAutocomplete(@RequestParam(value="term", required = false, defaultValue = "") String term) {
+        List<String> filteredGames = service.getPaginatedSteamList(term);
+        return filteredGames;
     }
 
 }

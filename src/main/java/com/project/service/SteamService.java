@@ -16,23 +16,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.Map;
-import java.util.Optional;
+import java.io.*;
+import java.util.*;
 
 @Service
 public class SteamService {
 
     private static final Logger logger = LoggerFactory.getLogger(SteamService.class);
-
     private static final String URL = "https://store.steampowered.com/appreviews/";
-
     private static final String URL_GET_APP_ID = "https://api.steampowered.com/ISteamApps/GetAppList/v2";
-
-    private static final String URL_RECENTLY_PLAYED_GAMES = "http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/";
-
     private static final String URL_STEAM_IMAGE = "https://store.steampowered.com/api/appdetails";
+
+    private static final String URL_PAGINATE = "https://steamcommunity.com/actions/SearchApps/";
 
     public SteamReview getReview(String id) {
         String payload;
@@ -64,19 +59,47 @@ public class SteamService {
     }
 
     public Integer getAppID(String name) {
-        JsonArray apps = getAppList();
+        JsonArray apps = getJsonPayload();
         Integer appId = 0;
-
         for (int i = 0; i < apps.size(); i++) {
-
             JsonObject app = apps.getJsonObject(i);
             if (app.getString("name").equalsIgnoreCase(name)) {
                 appId = app.getInt("appid");
             }
-
         }
-
         return appId;
+    }
+
+    public List<String> getPaginatedSteamList(String query) {
+
+        String payload;
+
+        String queryUrl = UriComponentsBuilder.fromUriString(URL_PAGINATE)
+                .path(query)
+                .toUriString();
+
+        logger.info(">>> Paginate Address: " + queryUrl);
+
+        RequestEntity<Void> request = RequestEntity.get(queryUrl).build();
+
+        RestTemplate template = new RestTemplate();
+        ResponseEntity<String> response;
+
+        response = template.exchange(request, String.class);
+        payload = response.getBody();
+
+        Reader strReader = new StringReader(payload);
+
+        List<String> list = new ArrayList<>();
+        JsonReader jsonReader = Json.createReader(strReader);
+        JsonArray result = jsonReader.readArray();
+        for (int i = 0; i < result.size(); i++) {
+            JsonObject gameResponse = result.getJsonObject(i);
+            String gameTitle = gameResponse.getString("name");
+            list.add(gameTitle);
+        }
+        logger.info(list.toString());
+        return list;
 
     }
 
@@ -104,7 +127,6 @@ public class SteamService {
         String imageUrl = jsonReader.readObject().getJsonObject(id).getJsonObject("data").getString("header_image");
         logger.info(imageUrl.toString());
 
-
         return imageUrl;
     }
 
@@ -122,7 +144,7 @@ public class SteamService {
         return game;
     }
 
-    public JsonArray getAppList() {
+    public JsonArray getJsonPayload() {
         String payload;
 
         RequestEntity<Void> request = RequestEntity.get(URL_GET_APP_ID).build();
@@ -133,7 +155,6 @@ public class SteamService {
         response = template.exchange(request, String.class);
         payload = response.getBody();
         logger.info("Payload: created");
-
         Reader strReader = new StringReader(payload);
 
         JsonReader jsonReader = Json.createReader(strReader);
