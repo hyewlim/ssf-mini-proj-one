@@ -26,7 +26,6 @@ public class SteamService {
     private static final String URL = "https://store.steampowered.com/appreviews/";
     private static final String URL_GET_APP_ID = "https://api.steampowered.com/ISteamApps/GetAppList/v2";
     private static final String URL_STEAM_IMAGE = "https://store.steampowered.com/api/appdetails";
-
     private static final String URL_PAGINATE = "https://steamcommunity.com/actions/SearchApps/";
 
     public SteamReview getReview(String id) {
