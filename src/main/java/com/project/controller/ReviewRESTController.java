@@ -1,7 +1,10 @@
 package com.project.controller;
 
+import com.project.model.SteamGame;
 import com.project.model.SteamReview;
 import com.project.model.SteamSpyGame;
+import com.project.model.User;
+import com.project.repository.GamesDao;
 import com.project.service.SteamService;
 import com.project.service.SteamSpyService;
 import org.slf4j.Logger;
@@ -9,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping ("/api")
@@ -21,6 +26,9 @@ public class ReviewRESTController {
 
     @Autowired
     private SteamSpyService spyService;
+
+    @Autowired
+    private GamesDao dao;
 
     @GetMapping (value = "/review/{id}")
     public ResponseEntity<?> getSteamReview(@PathVariable String id) {
@@ -45,6 +53,12 @@ public class ReviewRESTController {
     public ResponseEntity<?> getUrlGame(@PathVariable String id) {
         String url = steamService.getImageUrl(id);
         return ResponseEntity.ok(url);
+    }
+
+    @GetMapping (value = "/{user}")
+    public ResponseEntity<?> getUserList(@PathVariable User user) {
+        List<SteamGame> list = dao.findAll(user);
+        return ResponseEntity.ok(list);
     }
 
 }
